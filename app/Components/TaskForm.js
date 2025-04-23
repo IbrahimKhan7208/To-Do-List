@@ -20,7 +20,7 @@ const form = () => {
   if (task.length > 0) {
     renderTask = task.map((t, i) => {
       return (
-        <motion.div drag dragConstraints={reference} key={i} className="relative w-50 h-fit rounded-[40px] bg-zinc-900/70 py-6 px-4 m-4 text-zinc-300 overflow-hidden">
+        <motion.div drag dragConstraints={reference} whileDrag={{scale: 1.1}} key={i} className="relative w-50 h-fit rounded-[40px] bg-zinc-900/70 py-6 px-4 m-4 text-zinc-300 overflow-hidden">
           <div className="mb-5 p-4">
             <div className="flex gap-1 items-center"><FaTasks /> <p>Task {i+1}</p> </div>
             <p className="text-3xl break-words line-clamp-3">{t.title}</p>
