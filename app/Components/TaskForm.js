@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { FaTasks } from "react-icons/fa";
+import { IoIosArrowForward } from "react-icons/io";
+import { MdOutlineDelete } from "react-icons/md";
+import { motion } from "motion/react"
 
 const form = () => {
+  const reference = useRef(null);
   const [title, settitle] = useState("");
   const [desc, setdesc] = useState("");
   const [task, settask] = useState([]);
-  let renderTask = <h2 className="text-xl">No Task Available.</h2>;
+  let renderTask = <h1 className="text-3xl font-bold text-zinc-900 mt-20 ml-150">No Task Available.</h1>;
 
   const deleteHandler = (i) => {
     let copyTask = [...task];
@@ -15,20 +20,25 @@ const form = () => {
   if (task.length > 0) {
     renderTask = task.map((t, i) => {
       return (
-        <li key={i} className="flex justify-evenly">
-          <div className="flex justify-evenly mb-5 p-4 w-2/3">
-            <p className="text-3xl">{t.title}</p>
-            <p className="text-2xl">{t.desc}</p>
+        <motion.div drag dragConstraints={reference} key={i} className="relative w-50 h-fit rounded-[40px] bg-zinc-900/70 py-6 px-4 m-4 text-zinc-300 overflow-hidden">
+          <div className="mb-5 p-4">
+            <div className="flex gap-1 items-center"><FaTasks /> <p>Task {i+1}</p> </div>
+            <p className="text-3xl break-words line-clamp-3">{t.title}</p>
+            <p className="text-2xl break-words line-clamp-3">{t.desc}</p>
           </div>
+          <div className="flex justify-center mt-4">
           <button
             onClick={() => {
-              {confirm("Have You Completed The Task?") ? deleteHandler() : null}
+              if (confirm("Have You Completed The Task?")) {
+                deleteHandler(i);
+              }
             }}
-            className="bg-zinc-900 px-4 py-3 text-zinc-200 rounded-xl m-5 border-2"
+            className="bg-zinc-900 px-4 py-3 text-zinc-200 rounded-xl border-2 hover:bg-zinc-700 duration-300 flex items-center gap-1"
           >
-            Delete
+            Delete <MdOutlineDelete/>
           </button>
-        </li>
+          </div>
+        </motion.div>
       );
     });
   }
@@ -69,12 +79,12 @@ const form = () => {
             setdesc(ele.target.value);
           }}
         />
-        <button className="bg-zinc-900 px-4 py-3 text-zinc-300 rounded-xl m-5 border-2">
-          Add Task
+        <button className="bg-zinc-900 hover:bg-zinc-700 duration-300 flex items-center gap-1 px-4 py-3 text-zinc-300 rounded-xl m-5 border-2">
+          Add Task <IoIosArrowForward className="text-xl"/>
         </button>
       </form>
-      <div className="text-center bg-zinc-400 font-semibold py-4">
-        <ul>{renderTask}</ul>
+      <div ref={reference} className="fixed flex flex-wrap w-full h-screen">
+        {renderTask}
       </div>
     </>
   );
